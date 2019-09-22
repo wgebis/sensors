@@ -1,0 +1,18 @@
+#!/bin/bash
+# digitemp readout script
+
+CONFFILE=/etc/digitemp.conf
+
+a1=`digitemp_DS9097 -t $1 -c $CONFFILE  | awk {' print $7'}| tail -n 1`
+
+if [ $1 -eq 0 ]
+then
+#  mosquitto_pub -h localhost -t checktemp/attic-rack -u ebus -P ebus123 -m "{\"temp\":{\"value\":\"$a1\""}}
+  echo "attic_rack $a1" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
+elif [ $1 -eq 1 ] 
+then
+#  mosquitto_pub -h localhost -t checktemp/attic -u ebus -P ebus123 -m "{\"temp\":{\"value\":\"$a1\""}}
+  echo "attic $a1" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp 
+fi
+
+echo $a1

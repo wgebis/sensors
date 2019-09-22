@@ -1,0 +1,28 @@
+#!/bin/bash
+# ebusd readout script
+
+case $1 in
+1)
+  a1=`ebusctl read -f -c v81.1 RoomTemp | awk -F ";" '{ print $1; exit }'`
+  a2=`ebusctl read -f -c v81.1 RoomTempOffsetSelfWarming | awk -F ";" '{ print $1; exit }'`
+  a3=`echo "scale = 2; $a1 + $a2" | bc`
+#  mosquitto_pub -h localhost -t checktemp/1st-floor -u ebus -P ebus123 -m "{\"temp\":{\"value\":\"$a3\""}}
+  echo "first_floor $a3" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
+  ;;
+0)
+  a1=`ebusctl read -f -c 470 RoomTemp | awk -F ";" '{ print $1; exit }'`
+  a2=`ebusctl read -f -c 470 RoomTempOffsetSelfWarming | awk -F ";" '{ print $1; exit }'`
+  a3=`echo "scale = 2; $a1 + $a2" | bc` 
+#  mosquitto_pub -h localhost -t checktemp/living-room -u ebus -P ebus123 -m "{\"temp\":{\"value\":\"$a3\""}}
+  echo "living_room $a3" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
+  ;;
+2)
+  a3=`ebusctl read -f -c 470 OutsideTemp | awk -F ";" '{ print $1; exit }'`
+#  mosquitto_pub -h localhost -t checktemp/outside -u ebus -P ebus123 -m "{\"temp\":{\"value\":\"$a3\""}}
+  echo "outside $a3" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
+  ;;
+*)
+  echo "Error"
+  ;;
+esac
+
