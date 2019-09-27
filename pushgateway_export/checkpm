@@ -2,20 +2,18 @@
 PATH=$PATH:/usr/local/bin
 
 a1=`dht_2301 7 | awk {' print $3'}`
-
 echo "outside_humidity $a1" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
 
-PM1=`python3 /opt/sensors/read_pm.py | awk '{ print $4}' | sed 's/,//'`
+VV=`python3 /opt/sensors/read_pm.py | awk '{ print $4";"$5";"$6 }' | sed 's/,\|]//g'`
+
+PM1=`echo $VV | cut -d';' -f1`
 echo "outside_pm1 $PM1" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
 
-PM25=`python3 /opt/sensors/read_pm.py  | awk '{ print $5}' | sed 's/,//'`
+PM25=`echo $VV | cut -d';' -f2`
 echo "outside_pm25 $PM25" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
 
-PM10=`python3 /opt/sensors/read_pm.py | awk '{ print $6}' | sed 's/]//'`
+PM10=`echo $VV | cut -d';' -f3`
 echo "outside_pm10 $PM10" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
 
 pressure=`python3 /opt/sensors/read_pressure.py`
 echo "outside_pressure $pressure" | curl -s --data-binary @- http://192.168.5.8:9091/metrics/job/temp
-
-
-
