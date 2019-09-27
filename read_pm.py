@@ -11,5 +11,12 @@ pm1=int.from_bytes(r[10:12], 'big')
 pm25=int.from_bytes(r[12:14], 'big')
 pm10=int.from_bytes(r[14:16], 'big')
 
-print([pm1_cf, pm25_cf, pm10_cf, pm1, pm25, pm10])
+sum=int.from_bytes(r[0:1], 'big')
+sum+=int.from_bytes(r[1:2], 'big')
+for i in range(2, 21):
+  sum+=int.from_bytes(r[i:i+1], 'big')
+
+if (sum == int.from_bytes(r[22:24], 'big')):
+  print([pm1_cf, pm25_cf, pm10_cf, pm1, pm25, pm10])
+
 
