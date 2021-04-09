@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+#
 ### Control commands:
 # 
 # 1. Reading status(reading the satus of the relay (on/off))
