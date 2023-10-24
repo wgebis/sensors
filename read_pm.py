@@ -2,7 +2,7 @@ import serial
 import binascii
 import codecs
 
-ser = serial.Serial('/dev/ttyS0') 
+ser = serial.Serial('/dev/serial0') 
 r = ser.read(24)
 pm1_cf=int.from_bytes(r[4:6], 'big')
 pm25_cf=int.from_bytes(r[6:8], 'big')
