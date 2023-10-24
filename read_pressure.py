@@ -15,8 +15,10 @@ data = bme280.sample(bus, address, calibration_params)
 #print(data.id)
 #print(data.timestamp)
 #print(data.temperature)
-print(data.pressure)
+#print(data.pressure)
 #print(data.humidity)
 
 # there is a handy string representation too
 #print(data)
+
+print("{\"temperature\":",data.temperature,",\"pressure\":",data.pressure,"}")
