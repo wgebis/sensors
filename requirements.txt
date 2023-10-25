@@ -1,6 +1,5 @@
 smbus2
 RPi.bme280
-serial
 pyserial
 adafruit-circuitpython-am2320
 
